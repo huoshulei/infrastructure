@@ -1,4 +1,4 @@
-package org.thor.base.base.adapter.mix;
+package org.thor.base.base.mix;
 
 
 import android.support.annotation.NonNull;
