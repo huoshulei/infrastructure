@@ -1,12 +1,8 @@
 package org.thor.base.base;
 
-import android.databinding.Bindable;
-import android.databinding.Observable;
-import android.databinding.PropertyChangeRegistry;
 
 import org.thor.base.net.ApiException;
 import org.thor.base.net.Result;
-import org.thor.base.utils.logger.Logger;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -27,8 +23,7 @@ import io.reactivex.schedulers.Schedulers;
  * 版本:
  */
 
-public abstract class BaseViewModule implements Observable {
-    private transient PropertyChangeRegistry mCallbacks;
+public abstract class BaseViewModule {
     private OnProgress progress;
 
     public BaseViewModule(OnProgress progress) {
@@ -59,44 +54,6 @@ public abstract class BaseViewModule implements Observable {
         progress.onError(message);
     }
 
-    @Override
-    public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-        if (mCallbacks == null) {
-            mCallbacks = new PropertyChangeRegistry();
-        }
-        mCallbacks.add(callback);
-    }
-
-    @Override
-    public void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-        if (mCallbacks != null) {
-            mCallbacks.remove(callback);
-        }
-    }
-
-    /**
-     * 通知侦听器,所有这个实例的属性已经改变了
-     */
-    public synchronized void notifyChange() {
-        if (mCallbacks != null) {
-            mCallbacks.notifyCallbacks(this, 0, null);
-        }
-    }
-
-    /**
-     * 通知侦听器,一个特定的属性已经改变了。属性的getter变化应标有{@link Bindable}来生成一个字段
-     * Notifies listeners that a specific property has changed. The getter for the property
-     * that changes should be marked with {@link Bindable} to generate a field in
-     * <code>BR</code> to be used as <code>fieldId</code>.
-     *
-     * @param fieldId The generated BR id for the Bindable field.
-     */
-    public void notifyPropertyChanged(int fieldId) {
-        if (mCallbacks != null) {
-            mCallbacks.notifyCallbacks(this, fieldId, null);
-        }
-    }
-
 
     public <T> Configure<T> request(Flowable<? extends Result<T>> observable) {
         return new Configure<>(observable);
@@ -108,10 +65,10 @@ public abstract class BaseViewModule implements Observable {
     }
 
     public class Configure<T> {
-        private Consumer<T> onNext;
+        private Consumer<T>         onNext;
         private Consumer<Throwable> onError;
-        private Action onComplete;
-        private Flowable<T> observable;
+        private Action              onComplete;
+        private Flowable<T>         observable;
 
         Configure(Flowable<? extends Result<T>> observable) {
             this.observable = observable

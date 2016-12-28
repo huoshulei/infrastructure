@@ -16,7 +16,7 @@
 package org.thor.base.utils.interceptor;
 
 
-import com.android.annotations.NonNull;
+import android.support.annotation.NonNull;
 
 import org.thor.base.utils.logger.Logger;
 
@@ -73,7 +73,6 @@ public final class HttpLoggingInterceptor implements Interceptor {
 
 
     public HttpLoggingInterceptor setLevel(@NonNull Level level) {
-        if (level == null) throw new NullPointerException("level == null. Use Level.NONE instead.");
         this.level = level;
         return this;
     }

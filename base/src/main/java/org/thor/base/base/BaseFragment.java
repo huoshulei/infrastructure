@@ -19,9 +19,9 @@ import org.thor.base.view.OWLoadingView;
  * A simple {@link Fragment} subclass.
  */
 public abstract class BaseFragment extends Fragment {
-    private View view;
+    private   View     view;
     protected Activity activity;
-    private Dialog dialog;
+    private   Dialog   dialog;
     private boolean isFirstVisible = true;
 
     protected abstract
@@ -50,7 +50,7 @@ public abstract class BaseFragment extends Fragment {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     activity.dispatchTouchEvent(event);
                 }
-                                                                        return false;
+                return false;
             });//隐藏软键盘
             configView(view);
             initData();

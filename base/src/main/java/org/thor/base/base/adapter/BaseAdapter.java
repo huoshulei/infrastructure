@@ -1,13 +1,16 @@
 package org.thor.base.base.adapter;
 
 import android.content.Context;
-import android.databinding.ObservableArrayList;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import org.thor.base.base.BaseViewModule;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,11 +24,11 @@ import java.util.List;
  * 版本:
  */
 
-public abstract class BaseAdapter extends RecyclerView.Adapter<BaseViewHolder> {
-    private int                 layoutId; //布局文件id
+public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
+    private int            layoutId; //布局文件id
     //    private List mData;
-    private ObservableArrayList mData;
-    private Object      viewModule;
+    private List<T>        mData;
+    private BaseViewModule viewModule;
     private final int     LOAD_VIEW = 1;
     private       boolean loading   = false;//是否开启加载更多功能
     private View       loadView; //加载更多布局
@@ -33,6 +36,7 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private OnLoadMore loadMore;
     private Context    context;
     private View       mHeader;
+    private LinearLayout linearLayout;
     private View       mFooter;
     private View       mEmpty;
     private static final int DEFAULT = 0;
@@ -41,10 +45,11 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private static final int FOOTER  = 3;
     private static final int EMPTY   = 4;
 
-    public BaseAdapter(@LayoutRes int layoutId, @NonNull Object viewModule) {
+    public BaseAdapter(@LayoutRes int layoutId, @NonNull BaseViewModule viewModule) {
         if (layoutId == 0) throw new NullPointerException("布局文件不能为空");
         this.layoutId = layoutId;
         this.viewModule = viewModule;
+        mData=new ArrayList<>();
     }
 
     @Override
@@ -110,9 +115,8 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      * @param holder     viewHolder
      * @param t          data
      * @param viewModule module
-     * @param <T>        绑定数据到布局文件
      */
-    protected abstract <T> void convert(BaseViewHolder holder, T t, Object viewModule);
+    protected abstract void convert(BaseViewHolder holder, T t, Object viewModule);
 
 
     @Override
@@ -174,57 +178,54 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     /**
      * @param data 添加数据
-     * @param <T>
      */
-    public <T> void setData(List<T> data) {
-        mData = new ObservableArrayList<T>();
+    public  void setData(List<T> data) {
+        mData = new ArrayList<T>();
         mLoadingMoreEnable = true;
         showLoadView();
         mData.clear();
         mData.addAll(data);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(getHeaderCount(), data.size());
     }
 
     /**
      * @param data 添加数据
-     * @param <T>
      */
-    public <T> void addData(List<T> data) {
-        if (mData == null) mData = new ObservableArrayList<T>();
+    public  void addData(List<T> data) {
+        if (mData == null) mData = new ArrayList<T>();
+        int count = mData.size() + getHeaderCount();
         mLoadingMoreEnable = true;
         mData.addAll(data);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(count, data.size());
     }
 
     /**
      * @param data 添加数据
-     * @param <T>
      */
-    public <T> void addData(T data) {
-        if (mData == null) mData = new ObservableArrayList<T>();
+    public  void addData(T data) {
+        if (mData == null) mData = new ArrayList<T>();
+        int count = mData.size() + getHeaderCount();
         mLoadingMoreEnable = true;
         mData.add(data);
-        notifyDataSetChanged();
+        notifyItemChanged(count);
     }
 
     /**
      * @param data 添加数据
-     * @param <T>
      */
-    public <T> void addData(List<T> data, int position) {
+    public  void addData(List<T> data, int position) {
         mLoadingMoreEnable = true;
         mData.addAll(data);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(position, data.size());
     }
 
     /**
      * @param data 添加数据
-     * @param <T>
      */
-    public <T> void addData(T data, int position) {
+    public  void addData(T data, int position) {
         mLoadingMoreEnable = true;
         mData.add(position, data);
-        notifyDataSetChanged();
+        notifyItemChanged(position);
     }
 
     /**
@@ -241,14 +242,13 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      */
     public void remove(int position) {
         mData.remove(position);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
     }
 
     /**
      * @param data 删除指定数据
-     * @param <T>
      */
-    public <T> void remove(T data) {
+    public  void remove(T data) {
         if (mData != null) mData.remove(data);
         notifyDataSetChanged();
     }
@@ -259,6 +259,7 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     public void setHeader(View mHeader) {
         this.mHeader = mHeader;
+        linearLayout.addView(mHeader);
     }
 
     public View getFooter() {

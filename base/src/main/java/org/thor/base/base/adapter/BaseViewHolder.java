@@ -1,15 +1,34 @@
 package org.thor.base.base.adapter;
 
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
+import android.graphics.Bitmap;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.IdRes;
+import android.support.annotation.IntDef;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
+import android.text.util.Linkify;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.thor.base.R;
-import org.thor.base.BR;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Method;
+
+import static android.view.View.*;
 
 /**
  * 项目名称:  MSHB
@@ -23,45 +42,159 @@ import org.thor.base.BR;
  */
 
 public class BaseViewHolder extends RecyclerView.ViewHolder {
-    private final ViewDataBinding binding;
-    private RecyclerView recyclerView;
+    private final SparseArray<View> views = new SparseArray<>();
 
     private BaseViewHolder(View loadView) {
         super(loadView);
-        binding = null;
     }
 
-    private BaseViewHolder(ViewDataBinding binding) {
-        super(binding.getRoot());
-        this.binding = binding;
+    public BaseViewHolder setText(@IdRes int viewId, CharSequence text) {
+        View view = getView(viewId);
+        if (view instanceof TextView) {
+            ((TextView) view).setText(text);
+            return this;
+        }
+        throw new ClassCastException("目标不是TextView");
     }
 
-    public RecyclerView getRecyclerView() {
-        return recyclerView;
+    public BaseViewHolder setText(@IdRes int viewId, @StringRes int resId) {
+        View view = getView(viewId);
+        if (view instanceof TextView) {
+            ((TextView) view).setText(resId);
+            return this;
+        }
+        throw new ClassCastException("目标不是TextView");
     }
 
-    public BaseViewHolder setRecyclerView(RecyclerView recyclerView) {
-        this.recyclerView = recyclerView;
-        this.recyclerView.setHasFixedSize(true);
+    public BaseViewHolder setImageResource(@IdRes int viewId, @DrawableRes int resId) {
+        View view = getView(viewId);
+        if (view instanceof ImageView) {
+            ((ImageView) view).setImageResource(resId);
+            return this;
+        }
+        throw new ClassCastException("目标不是ImageView");
+    }
+
+    public BaseViewHolder setImageUrl(@IdRes int viewId, String url) {
+        View view = getView(viewId);
+        if (view instanceof ImageView) {
+            ImageLoader.getInstance().displayImage(url, (ImageView) view);
+            return this;
+        }
+        throw new ClassCastException("目标不是ImageView");
+    }
+
+    public BaseViewHolder setBackgrounColor(@IdRes int viewId, @ColorInt int color) {
+        getView(viewId).setBackgroundColor(color);
         return this;
     }
 
-    public BaseViewHolder setLayoutManger(RecyclerView.LayoutManager layoutManger) {
-        if (recyclerView == null) return this;
-        recyclerView.setLayoutManager(layoutManger);
+    public BaseViewHolder setBackgroundResource(int viewId, @DrawableRes int backgroundRes) {
+        getView(viewId).setBackgroundResource(backgroundRes);
         return this;
     }
 
-    public BaseViewHolder setAdapter(BaseAdapter adapter) {
-        if (recyclerView == null) return this;
-        recyclerView.setAdapter(adapter);
+    public BaseViewHolder setTextColor(@IdRes int viewId, @ColorInt int color) {
+        View view = getView(viewId);
+        if (view instanceof TextView) {
+            ((TextView) view).setTextColor(color);
+            return this;
+        }
+        throw new ClassCastException("目标不是TextView");
+    }
+
+    public BaseViewHolder setImageDrawable(@IdRes int viewId, Drawable drawable) {
+        View view = getView(viewId);
+        if (view instanceof ImageView) {
+            ((ImageView) view).setImageDrawable(drawable);
+            return this;
+        }
+        throw new ClassCastException("目标不是ImageView");
+    }
+
+    public BaseViewHolder setImageBitmap(@IdRes int viewId, Bitmap bitmap) {
+        View view = getView(viewId);
+        if (view instanceof ImageView) {
+            ((ImageView) view).setImageBitmap(bitmap);
+            return this;
+        }
+        throw new ClassCastException("目标不是ImageView");
+    }
+
+    public BaseViewHolder setAlpha(@IdRes int viewId, float alpha) {
+        getView(viewId).setAlpha(alpha);
         return this;
     }
 
-    public BaseViewHolder setAdapter(BaseAdapterT adapter) {
-        if (recyclerView == null) return this;
-        recyclerView.setAdapter(adapter);
+    public BaseViewHolder setVisible(@IdRes int viewId, @Visibility int visibility) {
+        getView(viewId).setVisibility(visibility);
         return this;
+    }
+
+    public BaseViewHolder linkify(@IdRes int viewId) {
+        View view = getView(viewId);
+        if (view instanceof TextView) {
+            Linkify.addLinks((TextView) view, Linkify.ALL);
+            return this;
+        }
+        throw new ClassCastException("目标不是ImageView");
+    }
+
+    public BaseViewHolder setTypeface(@IdRes int viewId, Typeface typeface) {
+        View view = getView(viewId);
+        if (view instanceof TextView) {
+            ((TextView) view).setTypeface(typeface);
+            ((TextView) view).setPaintFlags(((TextView) view).getPaintFlags() | 128);
+            return this;
+        }
+        throw new ClassCastException("目标不是TextView");
+    }
+
+    public BaseViewHolder setTypeface(Typeface typeface, @IdRes int... viewId) {
+        for (int id : viewId) {
+            setTypeface(id, typeface);
+        }
+        return this;
+    }
+
+    public BaseViewHolder initRecyclerView(@IdRes int viewId,
+                                           @NonNull BaseAdapter adapter,
+                                           @NonNull RecyclerView.LayoutManager layoutManager,
+                                           RecyclerView.ItemDecoration decoration) {
+        View view = getView(viewId);
+        if (view instanceof RecyclerView) {
+            ((RecyclerView) view).setHasFixedSize(true);
+            ((RecyclerView) view).setAdapter(adapter);
+            ((RecyclerView) view).setLayoutManager(layoutManager);
+            if (decoration != null) ((RecyclerView) view).addItemDecoration(decoration);
+        }
+        throw new ClassCastException("目标不是RecyclerView");
+    }
+
+    public BaseViewHolder setOnClickListener(@IdRes int viewId, OnClickListener listener) {
+        getView(viewId).setOnClickListener(listener);
+        return this;
+    }
+
+    public BaseViewHolder setOnClickListener(OnClickListener listener, @IdRes int... viewIds) {
+        for (int id : viewIds) {
+            getView(id).setOnClickListener(listener);
+        }
+        return this;
+    }
+
+    public BaseViewHolder setOnLongClickListener(@IdRes int viewId, OnLongClickListener listener) {
+        getView(viewId).setOnLongClickListener(listener);
+        return this;
+    }
+
+    private View getView(@IdRes int viewId) {
+        View view = views.get(viewId);
+        if (view == null) {
+            view = itemView.findViewById(viewId);
+            views.put(viewId, view);
+        }
+        return view;
     }
 
     /**
@@ -73,17 +206,14 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     * @param parent
-     * @param layoutId
      * @return 创建默认布局
      */
-    static BaseViewHolder onCreate(ViewGroup parent, int layoutId) {
-        return new BaseViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                layoutId, parent, false));
+    static BaseViewHolder onCreate(ViewGroup parent, @LayoutRes int layoutId) {
+        return new BaseViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(layoutId, parent, false));
     }
 
     /**
-     * @param parent
      * @return 创建加载布局
      */
     static BaseViewHolder onCreateLoadView(ViewGroup parent) {
@@ -99,37 +229,11 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     * @return 获取data bind对象
+     * @hide
      */
-    public ViewDataBinding getBinding() {
-        return binding;
+    @IntDef({VISIBLE, INVISIBLE, GONE})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface Visibility {
     }
 
-    /**
-     * @param id  variableId
-     * @param t   variable
-     */
-    public <T> BaseViewHolder setVariable(int id, T t) {
-        binding.setVariable(id, t);
-        binding.executePendingBindings();
-        return this;
-    }
-
-    /**
-     * @param handler 事件处理
-     */
-    public <T> BaseViewHolder setHandler(T handler) {
-        binding.setVariable(BR.handler, handler);
-        binding.executePendingBindings();
-        return this;
-    }
-
-    /**
-     * @param data 视图数据
-     */
-    public <T> BaseViewHolder setData(T data) {
-        binding.setVariable(BR.data, data);
-        binding.executePendingBindings();
-        return this;
-    }
 }
