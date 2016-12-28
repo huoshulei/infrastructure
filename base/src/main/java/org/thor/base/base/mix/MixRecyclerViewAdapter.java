@@ -232,7 +232,7 @@ public class MixRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
         onScrollListener.closeLoading();
     }
 
-    class GridSpanSize extends GridLayoutManager.SpanSizeLookup {
+    private class GridSpanSize extends GridLayoutManager.SpanSizeLookup {
 
         @Override
         public int getSpanSize(int position) {
