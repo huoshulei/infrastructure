@@ -6,11 +6,8 @@ import io.reactivex.disposables.Disposable;
  */
 
 public interface OnProgress {
-    void onComplete();
 
     void showProgress();
-
-    void onNavigate();
 
     void dismissProgress();
 

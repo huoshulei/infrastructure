@@ -1,7 +1,6 @@
 package org.thor.base.base;
 
 
-import org.thor.base.utils.logger.Logger;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.disposables.ListCompositeDisposable;
@@ -26,14 +25,6 @@ public abstract class RxLifeActivity extends BaseActivity implements OnProgress 
         if (!disposable.isDisposed()) disposable.clear();
     }
 
-    /**
-     * 网络请求成功完成回调
-     */
-    @Override
-    public void onComplete() {
-
-    }
-
 
     /**
      * 网络请求开始回调
@@ -41,14 +32,6 @@ public abstract class RxLifeActivity extends BaseActivity implements OnProgress 
     @Override
     public void showProgress() {
         showDialog();
-    }
-
-    /**
-     * 页面导航
-     */
-    @Override
-    public void onNavigate() {
-
     }
 
 

@@ -44,27 +44,12 @@ public abstract class BaseFragment extends Fragment {
         if (view == null) {
             int layoutResId = getLayoutResId();
             if (layoutResId == 0) throw new NullPointerException("布局文件不能为空");
-            view = init(inflater, container, layoutResId);
-            view.setFocusableInTouchMode(true);
-            view.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    activity.dispatchTouchEvent(event);
-                }
-                return false;
-            });//隐藏软键盘
+            view = inflater.inflate(layoutResId, container, false);
             configView(view);
+            initEvent();
             initData();
-
         }
         return view;
-    }
-
-
-    /**
-     * 关联布局 并获取当前布局文件到databind对象
-     */
-    protected View init(LayoutInflater inflater, ViewGroup container, int layoutResId) {
-        return inflater.inflate(layoutResId, container, false);
     }
 
     /**
@@ -73,6 +58,11 @@ public abstract class BaseFragment extends Fragment {
     protected void configView(View view) {
 
     }
+
+    /**
+     * 触控事件
+     */
+    protected abstract void initEvent();
 
     /*数据初始化*/
     protected void initData() {
@@ -97,7 +87,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     // dialog
-    public Dialog getDialog() {
+    private Dialog getDialog() {
         if (dialog == null) {
             dialog = new Dialog(activity, R.style.loading_dialog);
             dialog.setContentView(new OWLoadingView(activity), new ViewGroup.LayoutParams(100, 100));
@@ -108,16 +98,16 @@ public abstract class BaseFragment extends Fragment {
         return dialog;
     }
 
-    public void hideDialog() {
+    protected void hideDialog() {
         if (dialog != null)
             dialog.hide();
     }
 
-    public void showDialog() {
+    protected void showDialog() {
         getDialog().show();
     }
 
-    public void dismissDialog() {
+    protected void dismissDialog() {
         if (dialog != null) {
             dialog.dismiss();
             dialog = null;

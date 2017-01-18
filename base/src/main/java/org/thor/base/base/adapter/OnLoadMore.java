@@ -11,7 +11,8 @@ package org.thor.base.base.adapter;
  * 版本:
  * 加载更多接口
  */
+@Deprecated
 @FunctionalInterface
-public interface OnLoadMore {
+ interface OnLoadMore {
     void onLoadMore();
 }

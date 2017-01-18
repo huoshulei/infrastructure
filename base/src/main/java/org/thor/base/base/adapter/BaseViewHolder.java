@@ -20,8 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import org.thor.base.R;
 
 import java.lang.annotation.Retention;
@@ -40,14 +38,14 @@ import static android.view.View.*;
  * 备注:
  * 版本:
  */
-
-public class BaseViewHolder extends RecyclerView.ViewHolder {
-    private final SparseArray<View> views = new SparseArray<>();
+@Deprecated
+ class BaseViewHolder extends RecyclerView.ViewHolder {
+   /* private final SparseArray<View> views = new SparseArray<>();*/
 
     private BaseViewHolder(View loadView) {
         super(loadView);
     }
-
+    /*
     public BaseViewHolder setText(@IdRes int viewId, CharSequence text) {
         View view = getView(viewId);
         if (view instanceof TextView) {
@@ -75,14 +73,13 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         throw new ClassCastException("目标不是ImageView");
     }
 
-    public BaseViewHolder setImageUrl(@IdRes int viewId, String url) {
+   *//* public BaseViewHolder setImageUrl(@IdRes int viewId, String url) {
         View view = getView(viewId);
         if (view instanceof ImageView) {
-            ImageLoader.getInstance().displayImage(url, (ImageView) view);
             return this;
         }
         throw new ClassCastException("目标不是ImageView");
-    }
+    }*//*
 
     public BaseViewHolder setBackgrounColor(@IdRes int viewId, @ColorInt int color) {
         getView(viewId).setBackgroundColor(color);
@@ -197,43 +194,43 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return view;
     }
 
-    /**
+    *//**
      * @param view 根据view创建item布局
      * @return
-     */
+     *//*
     static BaseViewHolder onCreate(View view) {
         return new BaseViewHolder(view);
     }
 
-    /**
+    *//**
      * @return 创建默认布局
-     */
+     *//*
     static BaseViewHolder onCreate(ViewGroup parent, @LayoutRes int layoutId) {
         return new BaseViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false));
     }
 
-    /**
+    *//**
      * @return 创建加载布局
-     */
+     *//*
     static BaseViewHolder onCreateLoadView(ViewGroup parent) {
         return new BaseViewHolder((LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.loading_view, parent, false)));
     }
 
-    /**
+    *//**
      * @return 获取item对象
-     */
+     *//*
     public View getItemView() {
         return itemView;
     }
 
-    /**
+    *//**
      * @hide
-     */
+     *//*
     @IntDef({VISIBLE, INVISIBLE, GONE})
     @Retention(RetentionPolicy.SOURCE)
     @interface Visibility {
     }
-
+*/
 }

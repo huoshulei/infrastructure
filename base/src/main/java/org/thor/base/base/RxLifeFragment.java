@@ -29,13 +29,7 @@ public abstract class RxLifeFragment extends BaseFragment implements OnProgress 
     }
 
 
-    /**
-     * 网络请求成功完成回调
-     */
-    @Override
-    public void onComplete() {
 
-    }
 
     /**
      * 网络请求开始回调
@@ -43,14 +37,6 @@ public abstract class RxLifeFragment extends BaseFragment implements OnProgress 
     @Override
     public void showProgress() {
         showDialog();
-    }
-
-    /**
-     * 页面导航
-     */
-    @Override
-    public void onNavigate() {
-
     }
 
     /**

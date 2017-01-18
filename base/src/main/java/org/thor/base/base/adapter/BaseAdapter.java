@@ -23,9 +23,9 @@ import java.util.List;
  * 备注:
  * 版本:
  */
-
-public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
-    private int            layoutId; //布局文件id
+@Deprecated
+ abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
+   /* private int            layoutId; //布局文件id
     //    private List mData;
     private List<T>        mData;
     private BaseViewModule viewModule;
@@ -86,10 +86,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         return v;
     }
 
-    /**
+    *//**
      * @param parent
      * @return 加载更多布局
-     */
+     *//*
     private BaseViewHolder getLoadView(ViewGroup parent) {
         return loadView == null ? BaseViewHolder.onCreateLoadView(parent) : BaseViewHolder.onCreate(loadView);
     }
@@ -111,11 +111,11 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         }
     }
 
-    /**
+    *//**
      * @param holder     viewHolder
      * @param t          data
      * @param viewModule module
-     */
+     *//*
     protected abstract void convert(BaseViewHolder holder, T t, Object viewModule);
 
 
@@ -126,17 +126,17 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         return size + i + this.getHeaderCount() + this.getFooterCount();
     }
 
-    /**
+    *//**
      * @param loadMore 启用加载更多
-     */
+     *//*
     public void setLoadMore(OnLoadMore loadMore) {
         this.loadMore = loadMore;
         openLoading();
     }
 
-    /**
+    *//**
      * 加载更多回调
-     */
+     *//*
     private void LoadMore() {
         if (loading && mLoadingMoreEnable) {
             mLoadingMoreEnable = false;
@@ -145,40 +145,40 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         }
     }
 
-    /**
+    *//**
      * 打开加载更多
-     */
+     *//*
     private void openLoading() {
         this.loading = true;
     }
 
-    /**
+    *//**
      * 关闭加载更多
-     */
+     *//*
     public void closeLoading() {
         loading = false;
         hideLoadView();
     }
 
-    /**
+    *//**
      * 显示加载更多view
-     */
+     *//*
     private void showLoadView() {
         if (loadView != null) loadView.setVisibility(View.VISIBLE);
     }
 
-    /**
+    *//**
      * 隐藏加载更多view
-     */
+     *//*
     public void hideLoadView() {
         mLoadingMoreEnable = false;
         if (loadView != null) loadView.setVisibility(View.GONE);
     }
 
 
-    /**
+    *//**
      * @param data 添加数据
-     */
+     *//*
     public  void setData(List<T> data) {
         mData = new ArrayList<T>();
         mLoadingMoreEnable = true;
@@ -188,9 +188,9 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         notifyItemRangeChanged(getHeaderCount(), data.size());
     }
 
-    /**
+    *//**
      * @param data 添加数据
-     */
+     *//*
     public  void addData(List<T> data) {
         if (mData == null) mData = new ArrayList<T>();
         int count = mData.size() + getHeaderCount();
@@ -199,9 +199,9 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         notifyItemRangeChanged(count, data.size());
     }
 
-    /**
+    *//**
      * @param data 添加数据
-     */
+     *//*
     public  void addData(T data) {
         if (mData == null) mData = new ArrayList<T>();
         int count = mData.size() + getHeaderCount();
@@ -210,44 +210,44 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         notifyItemChanged(count);
     }
 
-    /**
+    *//**
      * @param data 添加数据
-     */
+     *//*
     public  void addData(List<T> data, int position) {
         mLoadingMoreEnable = true;
         mData.addAll(data);
         notifyItemRangeChanged(position, data.size());
     }
 
-    /**
+    *//**
      * @param data 添加数据
-     */
+     *//*
     public  void addData(T data, int position) {
         mLoadingMoreEnable = true;
         mData.add(position, data);
         notifyItemChanged(position);
     }
 
-    /**
+    *//**
      * 清空适配器数据
-     */
+     *//*
     public void clear() {
         if (mData != null) mData.clear();
         mData = null;
         notifyDataSetChanged();
     }
 
-    /**
+    *//**
      * @param position 删除角标为position的数据
-     */
+     *//*
     public void remove(int position) {
         mData.remove(position);
         notifyItemRemoved(position);
     }
 
-    /**
+    *//**
      * @param data 删除指定数据
-     */
+     *//*
     public  void remove(T data) {
         if (mData != null) mData.remove(data);
         notifyDataSetChanged();
@@ -272,5 +272,5 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
 
     public int getFooterCount() {
         return mFooter == null ? 0 : 1;
-    }
+    }*/
 }

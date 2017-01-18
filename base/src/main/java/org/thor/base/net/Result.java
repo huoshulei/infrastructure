@@ -19,9 +19,9 @@ public interface Result<T> {
 //    @SerializedName("data")
 //    private T data;
 //
-    public boolean isSuccess();
+    boolean isSuccess();
 
-    public String getMessage();
+    String getMessage();
 
-    public T getData();
+    T getData();
 }

@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.onemedia.onemedia.utils.take.crop.CropImageView
+    <org.thor.base.utils.take.crop.CropImageView
         android:id="@+id/crop_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
