@@ -1,7 +1,8 @@
 package org.thor.base.net;
 
 /**
- * Created by caihong on 2016/12/5.
+ * 创建人: 霍述雷
+ * 时 间:2016/12/5 14:04.
  */
 
 public class ApiException extends RuntimeException {

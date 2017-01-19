@@ -12,7 +12,6 @@ package org.thor.base.base.adapter;
  * 加载更多接口
  */
 @Deprecated
-@FunctionalInterface
  interface OnLoadMore {
     void onLoadMore();
 }

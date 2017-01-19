@@ -1,11 +1,14 @@
 package org.thor.infrastructure;
 
 import org.thor.base.base.OnProgress;
+import org.thor.base.utils.logger.Logger;
 
+import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
 
 /**
- * Created by caihong on 2016/12/22.
+ * 创建人: 霍述雷
+ * 时 间:2016/12/22 14:04.
  */
 
 public class MainViewModule extends TestViewModule {
@@ -17,7 +20,10 @@ public class MainViewModule extends TestViewModule {
         request(api.aa()).onNext(new Consumer<Object>() {
             @Override
             public void accept(Object o) throws Exception {
+             Logger.d("MainViewModule accept: "+o);
             }
         }).start();
     }
+
+
 }

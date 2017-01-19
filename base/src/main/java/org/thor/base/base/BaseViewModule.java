@@ -5,6 +5,8 @@ import com.google.gson.JsonParseException;
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 
 import org.json.JSONException;
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscription;
 import org.thor.base.App;
 import org.thor.base.net.ApiException;
 import org.thor.base.net.Net;
@@ -22,6 +24,7 @@ import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.internal.functions.Functions;
 import io.reactivex.schedulers.Schedulers;
 
@@ -37,11 +40,11 @@ import io.reactivex.schedulers.Schedulers;
  * 版本:
  */
 
-public abstract class BaseViewModule<T> {
+public abstract class BaseViewModule<API> {
     private   OnProgress progress;
-    protected T          api;
+    protected API          api;
 
-    public BaseViewModule(OnProgress progress, Class<T> clazz) {
+    public BaseViewModule(OnProgress progress, Class<API> clazz) {
         this.progress = progress;
         api = Net.getInstance(clazz);
     }
@@ -53,8 +56,8 @@ public abstract class BaseViewModule<T> {
     private void dismissProgress() {
         progress.dismissProgress();
     }
-
-    public final <T> Configure<T> request(Flowable<Result<T>> observable) {
+    protected abstract  <T>T converter(Result<T> result);
+    protected final <T> Configure<T> request(Flowable<? extends Result<T>> observable) {
         return new Configure<>(observable);
     }
 
@@ -64,10 +67,20 @@ public abstract class BaseViewModule<T> {
         private Consumer<Throwable> onError;
         private Action              onComplete;
 
-        Configure(Flowable<Result<T>> observable) {
+        Configure(Flowable<? extends Result<T>> observable) {
             this.observable = observable
-                    .map(this::apply)
-                    .onErrorResumeNext(this::handleException)
+                    .map( new Function<Result<T>, T>() {
+                        @Override
+                        public T apply(Result<T> result) throws Exception {
+                            return Configure.this.apply(result);
+                        }
+                    })
+                    .onErrorResumeNext(new Function<Throwable, Publisher<T>>() {
+                        @Override
+                        public Publisher<T> apply(Throwable e) throws Exception {
+                            return handleException(e);
+                        }
+                    })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .unsubscribeOn(Schedulers.io());
@@ -94,9 +107,24 @@ public abstract class BaseViewModule<T> {
             if (onNext == null) onNext = Functions.emptyConsumer();
             progress.addDisposable(observable
                     .subscribe(onNext,
-                            this::onError,
-                            this::onComplete,
-                            s -> s.request(Long.MAX_VALUE)
+                            new Consumer<Throwable>() {
+                                @Override
+                                public void accept(Throwable e) throws Exception {
+                                    onError(e);
+                                }
+                            },
+                            new Action() {
+                                @Override
+                                public void run() throws Exception {
+                                    Configure.this.onComplete();
+                                }
+                            },
+                            new Consumer<Subscription>() {
+                                @Override
+                                public void accept(Subscription s) throws Exception {
+                                    s.request(Long.MAX_VALUE);
+                                }
+                            }
                     )
             );
         }
@@ -113,7 +141,7 @@ public abstract class BaseViewModule<T> {
             if (onComplete != null) onComplete.run();
         }
 
-        private Flowable handleException(Throwable e) {
+        private Flowable<T> handleException(Throwable e) {
             Logger.d("BaseViewModule:" + e.toString());
             ApiException ex;
             if (e instanceof HttpException) {
@@ -175,10 +203,10 @@ public abstract class BaseViewModule<T> {
             return Flowable.error(ex);
         }
 
-        private <T> T apply(Result<T> result) {
-            if (!result.isSuccess()) throw new ServeException(result.getMessage());
-            if (result.getData() == null) return (T) new Object();
-            return result.getData();
+        private  T apply(Result<T> result) {
+            return converter(result);
         }
+
+
     }
 }

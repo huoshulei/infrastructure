@@ -1,9 +1,11 @@
 package org.thor.base;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
 
+//import org.thor.base.base.BaseActivity;
 import org.thor.base.base.BaseActivity;
+import org.thor.base.net.Net;
+import org.thor.base.net.NetOptions;
 import org.thor.base.utils.logger.LogLevel;
 import org.thor.base.utils.logger.Logger;
 
@@ -35,14 +37,20 @@ public abstract class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initLogger();
-        initBaseUrl();
+        initNet();
     }
 
     /**
      * 配置BaseUrl
      */
-    protected abstract void initBaseUrl();
+    private void initNet() {
+        NetOptions options = new NetOptions();
+        options.setDebug(isDebug());
+        initNet(options);
+        Net.init(options);
+    }
 
+    protected abstract void initNet(NetOptions options);
 
     /**
      * 模式

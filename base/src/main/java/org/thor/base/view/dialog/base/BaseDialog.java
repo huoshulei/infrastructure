@@ -127,9 +127,12 @@ public abstract class BaseDialog<T extends BaseDialog<T>> extends Dialog {
         setContentView(mLlTop, new ViewGroup.LayoutParams(mDisplayMetrics.widthPixels, (int) mMaxHeight));
 
 
-        mLlTop.setOnClickListener(v -> {
-            if (mCancel) {
-                dismiss();
+        mLlTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCancel) {
+                    BaseDialog.this.dismiss();
+                }
             }
         });
 

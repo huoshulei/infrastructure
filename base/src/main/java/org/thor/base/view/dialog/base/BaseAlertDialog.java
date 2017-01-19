@@ -190,27 +190,36 @@ public abstract class BaseAlertDialog<T extends BaseAlertDialog<T>> extends Base
             mTvBtnMiddle.setVisibility(View.GONE);
         }
 
-        mTvBtnLeft.setOnClickListener(v -> {
-            if (mOnBtnLeftClickL != null) {
-                mOnBtnLeftClickL.onBtnClick();
-            } else {
-                dismiss();
+        mTvBtnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnBtnLeftClickL != null) {
+                    mOnBtnLeftClickL.onBtnClick();
+                } else {
+                    BaseAlertDialog.this.dismiss();
+                }
             }
         });
 
-        mTvBtnRight.setOnClickListener(v -> {
-            if (mOnBtnRightClickL != null) {
-                mOnBtnRightClickL.onBtnClick();
-            } else {
-                dismiss();
+        mTvBtnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnBtnRightClickL != null) {
+                    mOnBtnRightClickL.onBtnClick();
+                } else {
+                    BaseAlertDialog.this.dismiss();
+                }
             }
         });
 
-        mTvBtnMiddle.setOnClickListener(v -> {
-            if (mOnBtnMiddleClickL != null) {
-                mOnBtnMiddleClickL.onBtnClick();
-            } else {
-                dismiss();
+        mTvBtnMiddle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnBtnMiddleClickL != null) {
+                    mOnBtnMiddleClickL.onBtnClick();
+                } else {
+                    BaseAlertDialog.this.dismiss();
+                }
             }
         });
     }

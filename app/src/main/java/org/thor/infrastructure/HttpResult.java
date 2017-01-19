@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import org.thor.base.net.Result;
 
 /**
- * Created by caihong on 2016/12/22.
+ * 创建人: 霍述雷
+ * 时 间:2016/12/22 14:03.
  */
 
 public class HttpResult<T> implements Result<T> {

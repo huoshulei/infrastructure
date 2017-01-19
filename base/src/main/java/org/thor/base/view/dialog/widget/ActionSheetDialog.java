@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -215,7 +216,12 @@ public class ActionSheetDialog extends BottomBaseDialog<ActionSheetDialog> {
         mTvCancel.setTextColor(mCancelTextColor);
         mTvCancel.setBackgroundDrawable(CornerUtils.listItemSelector(radius, mLvBgColor, mItemPressColor, 1, 0));
 
-        mTvCancel.setOnClickListener(v -> dismiss());
+        mTvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActionSheetDialog.this.dismiss();
+            }
+        });
 
         /** listview */
         mLv.setDivider(new ColorDrawable(mDividerColor));
@@ -233,10 +239,13 @@ public class ActionSheetDialog extends BottomBaseDialog<ActionSheetDialog> {
         }
 
         mLv.setAdapter(mAdapter);
-        mLv.setOnItemClickListener((parent, view, position, id) -> {
-            if (mOnOperItemClickL != null)
-                mOnOperItemClickL.onOperItemClick(parent, view, position, id);
+        mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (mOnOperItemClickL != null)
+                    mOnOperItemClickL.onOperItemClick(parent, view, position, id);
 
+            }
         });
 
         mLv.setLayoutAnimation(mLac);

@@ -89,7 +89,7 @@ public abstract class BaseFragment extends Fragment {
     // dialog
     private Dialog getDialog() {
         if (dialog == null) {
-            dialog = new Dialog(activity, R.style.loading_dialog);
+            dialog = new Dialog(activity);
             dialog.setContentView(new OWLoadingView(activity), new ViewGroup.LayoutParams(100, 100));
             dialog.setCancelable(true);
             dialog.setCanceledOnTouchOutside(false);

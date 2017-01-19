@@ -1,6 +1,4 @@
 <resources xmlns:ns1="http://schemas.android.com/tools">
-    <string name="app_name">thor</string>
-
 
     <string name="add">确定</string>
     <string name="album_view">选择图片</string>
@@ -29,6 +27,4 @@
     <string name="crop__pick_error">无效的图片</string>
     <string name="crop__saving">正在保存照片…</string>
     <string name="crop__wait">请等待…</string>
-
-
 </resources>

@@ -95,9 +95,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     // dialog
     private Dialog getDialog() {
         if (dialog == null) {
-            dialog = new Dialog(this, R.style.loading_dialog);
-            OWLoadingView view = new OWLoadingView(this);
-            dialog.setContentView(view, new ViewGroup.LayoutParams(100, 100));
+            dialog = new Dialog(this);
+            dialog.setContentView(new OWLoadingView(this), new ViewGroup.LayoutParams(100, 100));
             dialog.setCancelable(true);
             dialog.setCanceledOnTouchOutside(false);
         }
