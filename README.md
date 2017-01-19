@@ -15,7 +15,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        compile 'com.github.huoshulei:infrastructure:v1.0.1'
+	        compile 'com.github.huoshulei:infrastructure:v1.0.2'
 	}
 Share this release:
 
